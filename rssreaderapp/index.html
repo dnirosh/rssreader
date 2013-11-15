@@ -14,10 +14,14 @@
 <body> 
 <!-- Container page -->
 <div data-role="page" data-theme="b" id="landPage">
-	<div data-role="header" id="pageheader">
+	<div data-role="header" id="landpageheader">
 		<h1>Movies&Games</h1>
 		
 	</div>	
+	<div data-role="header" id="childpageheader" data-nobackbtn="true">
+		<h1>Home</h1>
+		<a id="buttonChildpageheader" data-icon="arrow-l" class="ui-btn-left" href="" data-role="button" data-inline="true">Back</a>
+	</div>
 	
 	<div data-role="content" id="buttonContent">
         <a data-role="button" href="" id="movieButton">
@@ -29,16 +33,16 @@
 	</div>
 	
 	<div data-role="content" id="movieContent">    
-        <ul id="MovielinksList" data-role="listview" data-inset="true"></ul>
+        <ul id="MovielinksList" data-divider-theme="d" data-role="listview" data-inset="true"></ul>
     </div>
 	
 	<div data-role="content" id="gameContent">    
-        <ul id="GamelinksList" data-role="listview" data-inset="true"></ul>
+        <ul id="GamelinksList" data-divider-theme="e" data-role="listview" data-inset="true"></ul>
     </div> 	
 	
 	<div data-role="content" id="welcomeContent">
 		<h3> Welcome to the Movies and Games Application </h3>
-		<h3> where you get to see only the hottest and latest of games'n movies over a beer !<h3>
+		<h3> lets look at some games'n movies over a beer !<h3>
 	</div>
 
 	
@@ -54,8 +58,9 @@
 		var gameNewReleasesRSSFeed = 'http://www.gamespot.com/feeds/new_releases/';
 		
 		$(document).ready(function () {   	   
+			showLandPageHeader();
 			contentRSSDescription.html('sending req1...');
-			populate(null);
+			//populate(null);
 		});
 		
 		function getRSSData(handler,url){
@@ -64,9 +69,6 @@
 		    //var varURI = 'http://i.rottentomatoes.com/syndication/rss/upcoming.xml';
 			
 			$.ajax({type: 'GET', dataType: 'xml', url: url, success: handler ,
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
-			},
 			 error: function (xhr, textStatus, errorThrown) {
 						contentRSSDescription.html('error:' + errorThrown);
 					}
@@ -84,7 +86,7 @@
 			//alert(xml);
 			var entries = [];
 			var s = '';
-			
+			s = '<li data-role="list-divider" role="heading">List of Movies and Games</li>';
 			$(xml).find("item").each(function(i,v){
 				entry = { 
 						title:$(v).find("title").text(), 
@@ -92,7 +94,7 @@
 						description:$.trim($(v).find("description").text())
 					};
 				entries.push(entry);
-				s += '<ul><a href="#contentPage" class="contentLink" data-entryid="'+i+'">' + $(v).find("title").text() + '</a></ul>';
+				s += '<li data-theme="c"><a href="#" data-transition="slide" data-entryid="'+i+'">' + $(v).find("title").text() + '</a></li>';
 
 				contentRSSDescription.html($(this).find("description").text());
 				
@@ -102,6 +104,16 @@
 			$("#MovielinksList").listview("refresh");
 		    $("#GamelinksList").append(s);
 			$("#GamelinksList").listview("refresh");
+		}
+		
+		//main
+		function hideLandPageHeader(){		
+			$("#landpageheader").hide();
+			$("#childpageheader").show();
+		}
+		function showLandPageHeader(){		
+			$("#childpageheader").hide();
+			$("#landpageheader").show();
 		}
 		
 		//Game functions
@@ -117,7 +129,13 @@
 			$("#welcomeContent").hide();
 		};
 		
+	    function showLandPage(){
+			$("#buttonContent").show();
+			$("#welcomeContent").show();
+		};
+		
 		$('#gameButton').click(function() {
+		  hideLandPageHeader();
 		  hideLandPage();
 		  hideMovie();
 		  showGame();
@@ -128,18 +146,24 @@
 		function hideMovie(){
 			$("#movieContent").hide();
 		}
-		function showMovie(){
+		function showMovie(){			
 		    getRSSData(populate ,movieRSSFeed);
 			$("#movieContent").show();
 		}
 		
 		$('#movieButton').click(function() {
+		  hideLandPageHeader();
 		  hideLandPage();
 		  hideGame();
 		  showMovie();
 		  return false;      
 		});
 		
+		$('#buttonChildpageheader').click(function() {
+		  showLandPageHeader();	
+		  showLandPage();
+		  return false;      
+		});
 	</script>
 
 </body> 
