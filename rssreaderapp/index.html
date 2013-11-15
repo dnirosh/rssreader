@@ -1,7 +1,7 @@
 <!DOCTYPE html> 
 <html> 
 	<head> 
-	<title>Your Application Title Here</title> 
+	<title>Movies and Games</title> 
 <!--
 <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.css" />	
 <script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
@@ -18,14 +18,28 @@
 <body> 
 <!-- Container page -->
 <div data-role="page" data-theme="b" id="containerPage">
-	<div data-role="header" id="testheader">
-		<h1>This is the Header</h1>
+	<div data-role="header" id="pageheader">
+		<h1>Movies and Games</h1>
+		<h2> Welcome to the Movies and Games Application </h2>
+		<h3> where you get to see only the hottest and latest of games'n movies over a beer !<h3>
 	</div>	
 	
-	<div data-role="content" id="contentRSSDescription"></div>
+	<div data-role="content">
+        <a data-role="button" href="#page1">
+            Movies
+        </a>
+        <a data-role="button" href="#page1">
+            Games
+        </a>
+	</div>
+	<div data-role="content" id="contentRSSDescription">
+	</div>
+    <div id="mgfooter" data-theme="a" data-role="footer" data-position="fixed" >
+        <h4>Powered by Exilesoft - Evening Brew </h4>
+    </div>	 
+</div>
 	
 	<script>
-		$.support.cors = true;
 	    var contentRSSDescription = $('#contentRSSDescription');
 		  
 		$(document).ready(function () {   	   
@@ -36,9 +50,9 @@
 		function getRSSData(handler){
 			//$('#contentRSSDescription').load('http://lkr.fxexchangerate.com/rss.xml');
 		
-		    var varURI = 'http://lkr.fxexchangerate.com/rss.xml';
+		    var varURI = 'http://i.rottentomatoes.com/syndication/rss/upcoming.xml';
 			
-			$.ajax({type: 'GET',crossDomain:true, dataType: 'xml', url: varURI, success: handler ,
+			$.ajax({type: 'GET', dataType: 'xml', url: varURI, success: handler ,
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
 			},
@@ -46,7 +60,6 @@
 						contentRSSDescription.html('error:' + errorThrown);
 					}
 			});
-			alert(1);
 		}
 		
 		function populate(xml){
@@ -56,18 +69,18 @@
 			else
 		     contentRSSDescription.html($(xml).find("item").text());
 			//alert(xml);
+			var ind = 0;
+			var itemArray = new Array();
+	  
 			$(xml).find("item").each(function(){
-				contentRSSDescription.html('debug.2');
+				var txt= $(this).find('title').text();
+				itemArray[ind++] = txt;
 				contentRSSDescription.html($(this).find("description").text());
-				//alert($(this).find('description').text());
+				
 			});
 		}
 		
-
 	</script>
-</div>
-
-
 
 </body> 
 </html> 
