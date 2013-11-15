@@ -1,17 +1,13 @@
 <!DOCTYPE html> 
 <html> 
-	<head> 
-	<title>Movies and Games</title> 
-<!--
-<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.css" />	
-<script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-<script src="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.js"></script>-->
 
-<link rel="stylesheet" href="css-js/jquery.mobile-1.0a2.min.css" />	
-<script src="css-js/jquery-1.4.4.min.js"></script>
-<script src="css-js/jquery.mobile-1.0a2.min.js"></script>
-<script src="css-js/jquery.ba-dotimeout.js"></script> 
-<script src="css-js/jquery.dst.js"></script> 
+<head> 
+	<title>Movies and Games</title> 
+    <meta name="viewport" content="width=device-width, initial-scale=1">    
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/latest/jquery.mobile.min.css" />
+    <script src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/latest/jquery.mobile.min.js"></script>
+</head> 
 
 
 </head> 
@@ -24,13 +20,21 @@
 	</div>	
 	
 	<div data-role="content" id="buttonContent">
-        <a data-role="button" href="#moviePage" id="movieButton">
+        <a data-role="button" href="" id="movieButton">
             Movies
         </a>
-        <a data-role="button" href="#gamePage" id="gameButton">
+        <a data-role="button" href="" id="gameButton">
             Games
         </a>
 	</div>
+	
+	<div data-role="content" id="movieContent">    
+        <ul id="MovielinksList" data-role="listview" data-inset="true"></ul>
+    </div>
+	
+	<div data-role="content" id="gameContent">    
+        <ul id="GamelinksList" data-role="listview" data-inset="true"></ul>
+    </div> 	
 	
 	<div data-role="content" id="welcomeContent">
 		<h3> Welcome to the Movies and Games Application </h3>
@@ -42,26 +46,16 @@
         <h4>Powered by Exilesoft - Evening Brew </h4>
     </div>	 
 </div>
-<div data-role="page" data-theme="c" id="moviePage">
-	<div data-role="content">    
-        <ul id="linksList1" data-role="listview" data-inset="true"></ul>
-    </div>
-</div>
-<div data-role="page" data-theme="d" id="gamePage">
-	 <div data-role="content">    
-        <ul id="linksList2" data-role="listview" data-inset="true"></ul>
-    </div>
-</div>	
 
 	<script>
-	    var contentRSSDescription = $('#contentRSSDescription');
+	    var contentRSSDescription = $('#welcomeContent');
 		var movieRSSFeed = 'http://i.rottentomatoes.com/syndication/rss/upcoming.xml';
 		var gameNewsRSSFeed = 'http://www.gamespot.com/feeds/news/';
 		var gameNewReleasesRSSFeed = 'http://www.gamespot.com/feeds/new_releases/';
 		
 		$(document).ready(function () {   	   
 			contentRSSDescription.html('sending req1...');
-			
+			populate(null);
 		});
 		
 		function getRSSData(handler,url){
@@ -81,13 +75,16 @@
 		
 		function populate(xml){
 			contentRSSDescription.html('debug.1');
-			if(xml==null||xml=='')
-			  contentRSSDescription.html('debug.xml is empty');
+			if(xml==null||xml==''){
+				var xmlStr='<rss><channel><item><title>RealSteel</title><link>www.realsteel.com</link><description>Real Deal</description></item></channel></rss>';
+				xml = $.parseXML( xmlStr );
+			}
 			else
 		     contentRSSDescription.html($(xml).find("item").text());
 			//alert(xml);
 			var entries = [];
 			var s = '';
+			
 			$(xml).find("item").each(function(i,v){
 				entry = { 
 						title:$(v).find("title").text(), 
@@ -101,19 +98,19 @@
 				
 			});
 			
-			$("#linksList1").append(s);
-			$("#linksList1").listview("refresh");
-		    $("#linksList2").append(s);
-			$("#linksList2").listview("refresh");
+			$("#MovielinksList").append(s);
+			$("#MovielinksList").listview("refresh");
+		    $("#GamelinksList").append(s);
+			$("#GamelinksList").listview("refresh");
 		}
 		
 		//Game functions
 		function hideGame(){
-			$("#gamePage").hide();
+			$("#gameContent").hide();
 		}
 		function showGame(){
 			getRSSData(populate ,gameNewsRSSFeed);
-			$("#gamePage").show();
+			$("#gameContent").show();
 		}
 		function hideLandPage(){
 			$("#buttonContent").hide();
@@ -129,11 +126,11 @@
 		
 		//Movie functions
 		function hideMovie(){
-			$("#moviePage").hide();
+			$("#movieContent").hide();
 		}
 		function showMovie(){
 		    getRSSData(populate ,movieRSSFeed);
-			$("#moviePage").show();
+			$("#movieContent").show();
 		}
 		
 		$('#movieButton').click(function() {
