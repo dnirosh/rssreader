@@ -54,12 +54,12 @@
 	<script>
 	    var contentRSSDescription = $('#welcomeContent');
 		var movieRSSFeed = 'http://i.rottentomatoes.com/syndication/rss/upcoming.xml';
-		var gameNewsRSSFeed = 'http://www.gamespot.com/feeds/news/';
+		var gameNewsRSSFeed = 'http://dl.ncbuy.com/rss/gamehouse.xml';
 		var gameNewReleasesRSSFeed = 'http://www.gamespot.com/feeds/new_releases/';
 		
 		$(document).ready(function () {   	   
 			showLandPageHeader();
-			contentRSSDescription.html('sending req1...');
+			contentRSSDescription.html('loading content...');
 			//populate(null);
 		});
 		
@@ -121,7 +121,7 @@
 			$("#gameContent").hide();
 		}
 		function showGame(){
-			getRSSData(populate ,gameNewsRSSFeed);
+			getRSSData(populate ,gameNewReleasesRSSFeed);
 			$("#gameContent").show();
 		}
 		function hideLandPage(){
