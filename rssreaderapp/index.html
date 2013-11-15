@@ -1,0 +1,73 @@
+<!DOCTYPE html> 
+<html> 
+	<head> 
+	<title>Your Application Title Here</title> 
+<!--
+<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.css" />	
+<script src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.0a2/jquery.mobile-1.0a2.min.js"></script>-->
+
+<link rel="stylesheet" href="css-js/jquery.mobile-1.0a2.min.css" />	
+<script src="css-js/jquery-1.4.4.min.js"></script>
+<script src="css-js/jquery.mobile-1.0a2.min.js"></script>
+<script src="css-js/jquery.ba-dotimeout.js"></script> 
+<script src="css-js/jquery.dst.js"></script> 
+
+
+</head> 
+<body> 
+<!-- Container page -->
+<div data-role="page" data-theme="b" id="containerPage">
+	<div data-role="header" id="testheader">
+		<h1>This is the Header</h1>
+	</div>	
+	
+	<div data-role="content" id="contentRSSDescription"></div>
+	
+	<script>
+		$.support.cors = true;
+	    var contentRSSDescription = $('#contentRSSDescription');
+		  
+		$(document).ready(function () {   	   
+			contentRSSDescription.html('sending req1...');
+			getRSSData(populate);
+		});
+		
+		function getRSSData(handler){
+			//$('#contentRSSDescription').load('http://lkr.fxexchangerate.com/rss.xml');
+		
+		    var varURI = 'http://lkr.fxexchangerate.com/rss.xml';
+			
+			$.ajax({type: 'GET',crossDomain:true, dataType: 'xml', url: varURI, success: handler ,
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader("Access-Control-Allow-Origin", "*");
+			},
+			 error: function (xhr, textStatus, errorThrown) {
+						contentRSSDescription.html('error:' + errorThrown);
+					}
+			});
+			alert(1);
+		}
+		
+		function populate(xml){
+			contentRSSDescription.html('debug.1');
+			if(xml==null||xml=='')
+			  contentRSSDescription.html('debug.xml is empty');
+			else
+		     contentRSSDescription.html($(xml).find("item").text());
+			//alert(xml);
+			$(xml).find("item").each(function(){
+				contentRSSDescription.html('debug.2');
+				contentRSSDescription.html($(this).find("description").text());
+				//alert($(this).find('description').text());
+			});
+		}
+		
+
+	</script>
+</div>
+
+
+
+</body> 
+</html> 
