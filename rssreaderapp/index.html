@@ -87,7 +87,7 @@
 						contentRSSDescription.html('error:' + errorThrown);
 					}
 			}); 
-			populate(null);
+			//populate(null);
 		}
 		
 		function populate(xml){
@@ -115,7 +115,7 @@
 						description:$.trim($(v).find("description").text())
 					};
 				entries.push(entry);
-				s += '<li data-theme="c"><a href="#" data-transition="slide" data-entryid="'+i+'">' + $(v).find("title").text() + '</a></li>';
+				s += '<li data-theme="c"><a href="' + entry.link + '" data-transition="slide" data-entryid="'+i+'">' + entry.title + '</a></li>';
 				//alert('s='+s);
 				contentRSSDescription.html($(this).find("description").text());
 				
