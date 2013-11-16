@@ -37,9 +37,18 @@
     </div>
 	
 	<div data-role="content" id="gameContent">    
+		<select id="selectGameCateoryId" name="selectGameCategory" data-theme="a">
+			<option value="1">
+				Nintendo
+			</option>
+			<option value="2">
+				Xbox360
+			</option>
+		</select>
+	
         <ul id="GamelinksList" data-divider-theme="e" data-role="listview" data-inset="true"></ul>
     </div> 	
-	
+
 	<div data-role="content" id="welcomeContent">
 		<h3> Welcome to the Movies and Games Application </h3>
 		<h3> lets look at some games'n movies over a beer !<h3>
@@ -86,7 +95,13 @@
 			//alert(xml);
 			var entries = [];
 			var s = '';
-			s = '<li data-role="list-divider" role="heading">List of Movies and Games</li>';
+			cleanMovieList();
+			cleanGameList();
+			if(this.listtype = 'Game')
+				s = '<li data-role="list-divider" role="heading">List of Games</li>';
+			else
+				s = '<li data-role="list-divider" role="heading">List of Movies </li>';
+			
 			$(xml).find("item").each(function(i,v){
 				entry = { 
 						title:$(v).find("title").text(), 
@@ -100,10 +115,14 @@
 				
 			});
 			
-			$("#MovielinksList").append(s);
-			$("#MovielinksList").listview("refresh");
-		    $("#GamelinksList").append(s);
-			$("#GamelinksList").listview("refresh");
+			if(this.listtype = 'Game'){
+				$("#GamelinksList").append(s);
+				$("#GamelinksList").listview("refresh");
+			}else{
+				$("#MovielinksList").append(s);
+				$("#MovielinksList").listview("refresh");
+			}
+		   
 		}
 		
 		//main
@@ -121,6 +140,7 @@
 			$("#gameContent").hide();
 		}
 		function showGame(){
+			populate.listtype = "Game";
 			getRSSData(populate ,gameNewReleasesRSSFeed);
 			$("#gameContent").show();
 		}
@@ -143,10 +163,18 @@
 		});
 		
 		//Movie functions
+		function cleanMovieList(){
+			$("#MovielinksList").empty();
+		}
+		function cleanGameList(){
+			$("#GamelinksList").empty();
+		}
+		
 		function hideMovie(){
 			$("#movieContent").hide();
 		}
 		function showMovie(){			
+			populate.listtype = "Movie";
 		    getRSSData(populate ,movieRSSFeed);
 			$("#movieContent").show();
 		}
