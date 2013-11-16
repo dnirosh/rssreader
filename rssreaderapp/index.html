@@ -67,7 +67,7 @@
 		var gameNewsRSSFeed = 'http://dl.ncbuy.com/rss/gamehouse.xml';
 		var gameNewReleasesRSSFeed = 'http://www.gamespot.com/feeds/new_releases/';
 		var gamepodCast = "http://feeds.ign.com/ignfeeds/podcasts/gamescoop/";
-		
+		var vlisttype = '';
 		$(document).ready(function () {   	   
 			showLandPageHeader();
 			hideGame();
@@ -87,7 +87,7 @@
 						contentRSSDescription.html('error:' + errorThrown);
 					}
 			}); 
-			//populate(null);
+			populate(null);
 		}
 		
 		function populate(xml){
@@ -98,12 +98,12 @@
 			}
 			else
 		     contentRSSDescription.html($(xml).find("item").text());
-			//alert(xml);
 			var entries = [];
 			var s = '';
 			cleanMovieList();
 			cleanGameList();
-			if(this.listtype = 'Game')
+			//alert('vlisttype='+vlisttype);
+			if(vlisttype == 'Game')
 				s = '<li data-role="list-divider" role="heading">List of Games</li>';
 			else
 				s = '<li data-role="list-divider" role="heading">List of Movies </li>';
@@ -116,12 +116,12 @@
 					};
 				entries.push(entry);
 				s += '<li data-theme="c"><a href="#" data-transition="slide" data-entryid="'+i+'">' + $(v).find("title").text() + '</a></li>';
-
+				//alert('s='+s);
 				contentRSSDescription.html($(this).find("description").text());
 				
 			});
 			
-			if(this.listtype = 'Game'){
+			if(vlisttype == 'Game'){
 				$("#GamelinksList").append(s);
 				$("#GamelinksList").listview("refresh");
 			}else{
@@ -146,12 +146,12 @@
 			$("#gameContent").hide();
 		}
 		function showGame(gameCategory){
-			if(gameCategory="1")
+			if(gameCategory=="1")
 				gamefeed = gameNewReleasesRSSFeed;
 			else
 				gamefeed = gameNewsRSSFeed;
 				
-			populate.listtype = "Game";
+			vlisttype = 'Game';
 			$('#hdrTitle').text("Games");
 			getRSSData(populate ,gamefeed);
 			$("#gameContent").show();
@@ -186,7 +186,7 @@
 			$("#movieContent").hide();
 		}
 		function showMovie(){			
-			populate.listtype = "Movie";
+			vlisttype = 'Movie';
 			$('#hdrTitle').text("Movies");
 		    getRSSData(populate ,movieRSSFeed);
 			$("#movieContent").show();
@@ -213,7 +213,7 @@
 			cleanMovieList();
 			cleanGameList();	
 			showGame($(this).attr('value'));
-		   //alert('Value change to ' + $(this).attr('value'));
+		    //alert('Value change to ' + $(this).attr('value'));
 		});
 
 	</script>
