@@ -68,6 +68,9 @@
 		
 		$(document).ready(function () {   	   
 			showLandPageHeader();
+			hideGame();
+			hideMovie();
+			showLandPage();
 			contentRSSDescription.html('loading content...');
 			//populate(null);
 		});
@@ -190,6 +193,8 @@
 		$('#buttonChildpageheader').click(function() {
 		  showLandPageHeader();	
 		  showLandPage();
+		  hideGame();
+		  hideMovie();
 		  return false;      
 		});
 	</script>
