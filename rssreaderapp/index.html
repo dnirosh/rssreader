@@ -19,7 +19,7 @@
 		
 	</div>	
 	<div data-role="header" id="childpageheader" data-nobackbtn="true">
-		<h1>Home</h1>
+		<h1 id="hdrTitle">Home</h1>
 		<a id="buttonChildpageheader" data-icon="arrow-l" class="ui-btn-left" href="" data-role="button" data-inline="true">Back</a>
 	</div>
 	
@@ -39,10 +39,10 @@
 	<div data-role="content" id="gameContent">    
 		<select id="selectGameCateoryId" name="selectGameCategory" data-theme="a">
 			<option value="1">
-				Nintendo
+				New Releases
 			</option>
 			<option value="2">
-				Xbox360
+				News
 			</option>
 		</select>
 	
@@ -65,13 +65,14 @@
 		var movieRSSFeed = 'http://i.rottentomatoes.com/syndication/rss/upcoming.xml';
 		var gameNewsRSSFeed = 'http://dl.ncbuy.com/rss/gamehouse.xml';
 		var gameNewReleasesRSSFeed = 'http://www.gamespot.com/feeds/new_releases/';
+		var gamepodCast = "http://feeds.ign.com/ignfeeds/podcasts/gamescoop/";
 		
 		$(document).ready(function () {   	   
 			showLandPageHeader();
 			hideGame();
 			hideMovie();
 			showLandPage();
-			contentRSSDescription.html('loading content...');
+			//contentRSSDescription.html('loading content...');
 			//populate(null);
 		});
 		
@@ -84,7 +85,8 @@
 			 error: function (xhr, textStatus, errorThrown) {
 						contentRSSDescription.html('error:' + errorThrown);
 					}
-			});
+			}); 
+			//populate(null);
 		}
 		
 		function populate(xml){
@@ -142,9 +144,15 @@
 		function hideGame(){
 			$("#gameContent").hide();
 		}
-		function showGame(){
+		function showGame(gameCategory){
+			if(gameCategory="1")
+				gamefeed = gameNewReleasesRSSFeed;
+			else
+				gamefeed = gameNewsRSSFeed;
+				
 			populate.listtype = "Game";
-			getRSSData(populate ,gameNewReleasesRSSFeed);
+			$('#hdrTitle').text("Games");
+			getRSSData(populate ,gamefeed);
 			$("#gameContent").show();
 		}
 		function hideLandPage(){
@@ -161,7 +169,7 @@
 		  hideLandPageHeader();
 		  hideLandPage();
 		  hideMovie();
-		  showGame();
+		  showGame("1");
 		  return false;      
 		});
 		
@@ -178,6 +186,7 @@
 		}
 		function showMovie(){			
 			populate.listtype = "Movie";
+			$('#hdrTitle').text("Movies");
 		    getRSSData(populate ,movieRSSFeed);
 			$("#movieContent").show();
 		}
@@ -197,6 +206,13 @@
 		  hideMovie();
 		  return false;      
 		});
+		
+		$('#selectGameCateoryId').change(function() 
+		{
+			showGame($(this).attr('value'));
+		   //alert('Value change to ' + $(this).attr('value'));
+		});
+
 	</script>
 
 </body> 
