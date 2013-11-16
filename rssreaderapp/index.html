@@ -209,6 +209,8 @@
 		
 		$('#selectGameCateoryId').change(function() 
 		{
+			cleanMovieList();
+			cleanGameList();	
 			showGame($(this).attr('value'));
 		   //alert('Value change to ' + $(this).attr('value'));
 		});
